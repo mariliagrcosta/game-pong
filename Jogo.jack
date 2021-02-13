@@ -1,0 +1,44 @@
+class Jogo {
+
+    static Jogo jogoAtual; // Jogo
+    field Barra barra; // A barra
+    field int barraComprimentoAtual; // Comprimento atual da barra
+    field Bola bola; // A bola
+    field boolean gameOver; // O jogo acabou?
+    field int score; // Pontuação
+
+
+    // Constroi um novo jogo
+    constructor Jogo novo() { 
+        do Screen.clearScreen(); // Limpa a tela
+        let barraComprimentoAtual = 60; // Comprimento inicial da barra
+        let barra = Barra.novo(226, 247, barraComprimentoAtual, 5); // Define a barra
+        
+        let score = 0; // Pontuação
+        let gameOver = false; // Jogo não acabou
+
+        return this;
+    }
+
+    // Método - Encapsula a desalocação de um objeto da memória
+    method void dispose() { 
+        do barra.dispose(); // Descarta a barra
+        do Memory.deAlloc(this); // Desaloca o objeto "Jogo"
+        return;
+
+    }
+
+    // Função - Define um novo jogo
+    function void novoJogo() {
+        let jogoAtual = Jogo.novo(); // Atribui as informações referentes ao novo jogo a variável "jogoAtual"
+        return;
+
+    }
+    
+    //  Função - Retorna a variável com as configurações referentes ao novo jogo
+    function Jogo retornoJogo() {
+        return jogoAtual;
+
+    }
+
+}

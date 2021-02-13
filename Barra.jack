@@ -1,0 +1,64 @@
+// PONG GAME //
+
+/**
+NOTAS:
+ - Field: Variáveis usadas para definir propriedades de um objeto individual de uma classe (cópia única);
+ - Static: Variáveis definidas no nivel da classe e compartilhadas por todos os objetos devidados (da classe);
+ - Var: Variável local
+
+ - Dispose(): De maneira convencional, cada classe deve conter o método "dispose()";
+*/
+
+class Barra{
+
+    // Declaração das variáveis responsáveis por armazenar as informações referentes a barra
+    field int xPosicao; // Posição da barra no eixo x
+    field int yPosicao; // Posição da barra no eixo y
+    field int comprimento; // Comprimento da barra 
+    field int largura; // Largura da barra 
+    field int movimento;  // Direção da barra (esquerda ou direita)
+
+    // Construtor - Constroi a barra com base nas informações dadas;
+    constructor Barra novo(int xBarra, int yBarra, int compBarra, int largBarra) { 
+
+        let xPosicao = xBarra;
+        let yPosicao = yBarra;
+        
+        let comprimento = compBarra;
+        let largura = largBarra;
+        do mostrar();
+        return this;
+
+    }
+
+    // Método - Encapsula a desalocação de um objeto da memória
+    method void dispose() { 
+        do Memory.deAlloc(this); // Desaloca o objeto "Barra"
+        return;
+
+    }
+
+    // Método - Desenha um retângulo;
+    method void desenhar(){ 
+        do Screen.drawRectangle(xPosicao, yPosicao, xPosicao + comprimento, yPosicao + largura); // Deseja um retângulo preenchido usando a cor atual;
+        return;
+
+    }
+    
+    // Método - "Mostra" o retângulo;
+    method void mostrar() { 
+        do Screen.setColor(true); // Define a cor para preto;
+        do desenhar(); // Desenha o retângulo preto (preenchido);
+        return;
+
+    }
+    
+    //Método - "Escode" o retângulo;
+    method void esconder() { 
+        do Screen.setColor(false); // Define a cor para branca;
+        do desenhar(); // Desenha o retângulo branco (preenchido);
+        return;
+
+    }
+
+}   

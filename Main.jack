@@ -1,0 +1,13 @@
+// Ponto de entrada do programa (primeira código a ser rodado)
+class Main{ 
+    
+    // Inicializa o jogo
+    function void main(){  
+        var Jogo jogoAtual;  // Declara a variável "jogoAtual"
+        do Jogo.novoJogo();  // "Gera" um novo jogo
+        let jogoAtual = Jogo.retornoJogo(); // Atribui o novo jogo a uma variável
+        do jogoAtual.dispose(); // Descarta o jogo atual quando não for mais necessário
+        return;
+
+    }
+}
