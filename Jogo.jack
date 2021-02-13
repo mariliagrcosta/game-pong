@@ -12,8 +12,8 @@ class Jogo {
     constructor Jogo novo() { 
         do Screen.clearScreen(); // Limpa a tela
         let barraComprimentoAtual = 60; // Comprimento inicial da barra
-        let barra = Barra.novo(226, 247, barraComprimentoAtual, 5); // Define a barra
-        
+        let barra = Barra.novo(226, 240, barraComprimentoAtual, 5); // Define a barra
+
         let score = 0; // Pontuação
         let gameOver = false; // Jogo não acabou
 

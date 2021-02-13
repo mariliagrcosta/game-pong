@@ -1,8 +1,9 @@
 class Bola{
 
-    
+    field int xPosicao; // Posição da bola no eixo x
+    field int yPosicao; // Posição da bola no eixo y
 
-
+    field int paredeEsq, paredeDir, paredeCima, paredeBaixo; // Posição das 4 paredes
 
 
 }
