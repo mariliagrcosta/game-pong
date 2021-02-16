@@ -7,18 +7,20 @@ NOTAS:
  - Var: Variável local
 
  - Dispose(): De maneira convencional, cada classe deve conter o método "dispose()";
+
+ -Accessors: A única maneira de acessar um valor (field) fora da classe é por meio de accessors
 */
 
 class Barra{
 
-    // Declaração das variáveis responsáveis por armazenar as informações referentes a barra
-    field int xPosicao; // Posição da barra no eixo x
-    field int yPosicao; // Posição da barra no eixo y
-    field int comprimento; // Comprimento da barra 
-    field int largura; // Largura da barra 
-    field int movimento;  // Direção da barra (esquerda ou direita)
+    //Declaração das variáveis responsáveis por armazenar as informações referentes a barra
+    field int xPosicao; //Posição da barra no eixo x
+    field int yPosicao; //Posição da barra no eixo y
+    field int comprimento; //Comprimento da barra 
+    field int largura; //Largura da barra 
+    field int direcao;  //Direção da barra (parado, esquerda ou direita)
 
-    // Construtor - Constroi a barra com base nas informações dadas;
+    //Construtor - Constroi a barra com base nas informações dadas;
     constructor Barra novo(int xBarra, int yBarra, int compBarra, int largBarra) { 
 
         let xPosicao = xBarra;
@@ -31,34 +33,84 @@ class Barra{
 
     }
 
-    // Método - Encapsula a desalocação de um objeto da memória
+    //Método - Encapsula a desalocação de um objeto da memória
     method void dispose() { 
         do Memory.deAlloc(this); // Desaloca o objeto "Barra"
         return;
 
     }
 
-    // Método - Desenha um retângulo;
+    //Método - Desenha um retângulo;
     method void desenhar(){ 
         do Screen.drawRectangle(xPosicao, yPosicao, xPosicao + comprimento, yPosicao + largura); // Deseja um retângulo preenchido usando a cor atual;
         return;
-
     }
     
-    // Método - "Mostra" o retângulo;
+    //Método - "Mostra" o retângulo;
     method void mostrar() { 
-        do Screen.setColor(true); // Define a cor para preto;
-        do desenhar(); // Desenha o retângulo preto (preenchido);
+        do Screen.setColor(true); //Define a cor para preto;
+        do desenhar(); //Desenha o retângulo preto (preenchido);
         return;
-
     }
     
     //Método - "Escode" o retângulo;
     method void esconder() { 
-        do Screen.setColor(false); // Define a cor para branca;
-        do desenhar(); // Desenha o retângulo branco (preenchido);
+        do Screen.setColor(false); //Define a cor para branca;
+        do desenhar(); //Desenha o retângulo branco (preenchido);
         return;
-
     }
 
+    //Acessor - Permite que o acesso fora da classe à posição (eixo x) do INÍCIO barra seja possível; 
+    method int getEsquerda(){
+        return xPosicao; //Retorna a posição do INÍCIO da barra
+    }
+
+    //Acessor - Permite que o acesso fora da classe à posição (eixo x) do FIM barra seja possível; 
+    method int getDireita(){
+        return xPosicao + comprimento; //Retorna a posição do FIM da barra
+    }
+
+    //Método - Define a direção do movimento da barra (baseado no que foi pressionado no teclado)
+    method int definirDirecao(int tecladoInfo){
+        let direcao = tecladoInfo;  //Atribui à variável "movimento" a direção que a barra deve se mover 
+        return direcao;
+    }
+
+    //Método - Ajusta a barra de posição de acordo com o output do teclado -> movimento da barra;
+    method void movimento(){
+        //Confere se a direção é 1 (esquerda);
+        if (direcao = 1){
+            let xPosicao = xPosicao - 3; //Atualiza o valor referente a nova posição da barra no eixo x após o movimento;
+            //Confere se a barra não passou do limite;
+            if (xPosicao < 0){
+                let xPosicao = 0; //Define o valor da posição da barra no eixo x para 0 (impossibilitanto que passe do limite);
+            }
+            
+            //Apaga o fim da barra original e desenha um novo começo -> Passa a ideia de movimento;
+            do Screen.setColor(false); //Escolhe o branco;
+            do Screen.drawRectangle((xPosicao + comprimento) + 1, yPosicao, (xPosicao + comprimento) + 3, yPosicao + largura); //Um retângulo branco é desenhado na posição indicada -> Final da barra original é "apagado";
+            do Screen.setColor(true); //Escolhe o preto;
+            do Screen.drawRectangle(xPosicao, yPosicao, xPosicao + 2, yPosicao + largura); //Um retângulo preto é desenhado na posição indicada -> Começo da barra é pintado;
+        }
+        //Confere se a direção não é 1 (esquerda);
+        else{
+            //Confere se a direção é 2 (direita);
+            if (direcao = 2){
+            let xPosicao = xPosicao + 3; //Atualiza o valor referente a nova posição da barra no eixo x após o movimento;
+            //Confere se a barra não passou do limite;
+            if ((xPosicao + comprimento) > 511){
+                let xPosicao = 511 - comprimento; //Define o valor da posição da barra no eixo x para 511 - comprimento (impossibilitanto que passe do limite);
+            }
+
+            //Apaga o fim da barra original e desenha um novo começo -> Passa a ideia de movimento
+            do Screen.setColor(false); //Escolhe o branco;
+            do Screen.drawRectangle((xPosicao - 3), yPosicao, xPosicao - 1, yPosicao + largura); //Um retângulo branco é desenhado na posição indicada -> Final da barra original é "apagado";
+            do Screen.setColor(true); //Escolhe o preto;
+            do Screen.drawRectangle((xPosicao + comprimento) - 2, yPosicao, xPosicao + comprimento, yPosicao + largura); //Um retângulo preto é desenhado na posição indicada -> Começo da barra é pintado;
+            }
+        }
+        
+        return;
+    }
+        
 }   

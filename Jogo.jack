@@ -1,44 +1,82 @@
 class Jogo {
 
-    static Jogo jogoAtual; // Jogo
-    field Barra barra; // A barra
-    field int barraComprimentoAtual; // Comprimento atual da barra
-    field Bola bola; // A bola
-    field boolean gameOver; // O jogo acabou?
-    field int score; // Pontuação
+    static Jogo jogoAtual; //Jogo
+    field Barra barra; //A barra
+    field int barraComprimentoAtual; //Comprimento atual da barra
+    field Bola bola; //A bola
+    field boolean gameOver; //O jogo acabou?
+    field int score; //Pontuação
 
 
-    // Constroi um novo jogo
+    //Constroi um novo jogo
     constructor Jogo novo() { 
-        do Screen.clearScreen(); // Limpa a tela
-        let barraComprimentoAtual = 60; // Comprimento inicial da barra
-        let barra = Barra.novo(226, 240, barraComprimentoAtual, 5); // Define a barra
+        do Screen.clearScreen(); //Limpa a tela
+        let barraComprimentoAtual = 60; //Comprimento inicial da barra
+        let barra = Barra.novo(226, 240, barraComprimentoAtual, 5); //Define a barra
+        do Screen.drawRectangle(0, 12, 511, 18); //Limite superior 
+        do Output.printString("Score: 0"); //Imprime "Score:0" no canto superior esquerdo
 
-        let score = 0; // Pontuação
-        let gameOver = false; // Jogo não acabou
+        let score = 0; //Pontuação
+        let gameOver = false; //Jogo não acabou
 
         return this;
     }
 
-    // Método - Encapsula a desalocação de um objeto da memória
+    //Método - Encapsula a desalocação de um objeto da memória
     method void dispose() { 
-        do barra.dispose(); // Descarta a barra
-        do Memory.deAlloc(this); // Desaloca o objeto "Jogo"
+        do barra.dispose(); //Descarta a barra
+        do Memory.deAlloc(this); //Desaloca o objeto "Jogo"
         return;
-
     }
 
-    // Função - Define um novo jogo
+    //Função - Define um novo jogo
     function void novoJogo() {
-        let jogoAtual = Jogo.novo(); // Atribui as informações referentes ao novo jogo a variável "jogoAtual"
+        let jogoAtual = Jogo.novo(); //Atribui as informações referentes ao novo jogo a variável "jogoAtual"
         return;
-
     }
     
-    //  Função - Retorna a variável com as configurações referentes ao novo jogo
+    //Função - Retorna a variável com as configurações referentes ao novo jogo
     function Jogo retornoJogo() {
         return jogoAtual;
+    }
+    
+    // Método - Começa o jogo
+    method void start(){
+        var char tecla;  //Saídas do teclado
+
+        //Enquanto o jogo ainda não tiver terminado
+        while (~gameOver){ 
+            //Enquanto o output do teclado for 0 (nenhuma tecla pressionada) e o jogo não tiver terminado
+            while ((tecla = 0) & (~gameOver)){
+                let tecla = Keyboard.keyPressed(); //Atribui a "tecla" o output do telaco (número referente a tecla que está sebndo pressionada)
+                //do barra.definirDirecao(0); //A barra para de se movimentar quando nenhuma tecla está sendo pressionada
+                do barra.movimento(); //Move a barra (movimento continua baseado na última tecla pressionada)
+                do Sys.wait(40); //Aguarda 40 millisegundos
+
+            }
+
+            if (tecla = 130){ //Se o output do teclado for 130 (seta esquerda)
+                do barra.definirDirecao(1); //Definir a direção do movimento para esquerda
+            }
+            else{
+                if (tecla = 132){ //Se o output do teclado for 132 (seta direita)
+                    do barra.definirDirecao(2); //Definir a direção do movimento para direita
+                }
+            }
+            
+            //Enquanto o output do teclado for diferente de 0 (alguma tecla pressionada) e o jogo não tiver terminado
+            while ((~(tecla = 0)) & (~gameOver)){ 
+                let tecla = Keyboard.keyPressed(); //Checar se alguma tecla começou a ser pressionada
+                do barra.movimento(); //Move a barra (baseado na tecla que está sendo pressionada)
+                do Sys.wait(40); //Aguarda 40 millisegundos
+
+            }
+        }
+
+        return;
 
     }
+
+    
 
 }
