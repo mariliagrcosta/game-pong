@@ -78,7 +78,7 @@ push argument 0
 pop pointer 0
 push argument 1
 pop this 4
-push this 4
+push constant 0
 return
 function Barra.movimento 0
 push argument 0

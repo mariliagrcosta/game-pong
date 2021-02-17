@@ -4,9 +4,9 @@ call Memory.alloc 1
 pop pointer 0
 call Screen.clearScreen 0
 pop temp 0
-push constant 60
+push constant 80
 pop this 1
-push constant 226
+push constant 215
 push constant 240
 push this 1
 push constant 5

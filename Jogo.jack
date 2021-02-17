@@ -11,8 +11,8 @@ class Jogo {
     //Constroi um novo jogo
     constructor Jogo novo() { 
         do Screen.clearScreen(); //Limpa a tela
-        let barraComprimentoAtual = 60; //Comprimento inicial da barra
-        let barra = Barra.novo(226, 240, barraComprimentoAtual, 5); //Define a barra
+        let barraComprimentoAtual = 80; //Comprimento inicial da barra
+        let barra = Barra.novo(215, 240, barraComprimentoAtual, 5); //Define a barra
         do Screen.drawRectangle(0, 12, 511, 18); //Limite superior 
         do Output.printString("Score: 0"); //Imprime "Score:0" no canto superior esquerdo
 

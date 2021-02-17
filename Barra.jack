@@ -71,9 +71,9 @@ class Barra{
     }
 
     //Método - Define a direção do movimento da barra (baseado no que foi pressionado no teclado)
-    method int definirDirecao(int tecladoInfo){
+    method void definirDirecao(int tecladoInfo){
         let direcao = tecladoInfo;  //Atribui à variável "movimento" a direção que a barra deve se mover 
-        return direcao;
+        return;
     }
 
     //Método - Ajusta a barra de posição de acordo com o output do teclado -> movimento da barra;
