@@ -1,11 +1,13 @@
 class Jogo {
 
     static Jogo jogoAtual; //Jogo
+
+    field int score; //Pontuação
     field Barra barra; //A barra
     field int barraComprimentoAtual; //Comprimento atual da barra
     field Bola bola; //A bola
+
     field boolean gameOver; //O jogo acabou?
-    field int score; //Pontuação
 
 
     //Constroi um novo jogo
@@ -50,7 +52,7 @@ class Jogo {
             while ((tecla = 0) & (~gameOver)){
                 let tecla = Keyboard.keyPressed(); //Atribui a "tecla" o output do telaco (número referente a tecla que está sebndo pressionada)
                 //do barra.definirDirecao(0); //A barra para de se movimentar quando nenhuma tecla está sendo pressionada
-                do barra.movimento(); //Move a barra (movimento continua baseado na última tecla pressionada)
+                do barra.descolamento(); //Move a barra (movimento continua baseado na última tecla pressionada)
                 do Sys.wait(40); //Aguarda 40 millisegundos
 
             }
@@ -67,7 +69,7 @@ class Jogo {
             //Enquanto o output do teclado for diferente de 0 (alguma tecla pressionada) e o jogo não tiver terminado
             while ((~(tecla = 0)) & (~gameOver)){ 
                 let tecla = Keyboard.keyPressed(); //Checar se alguma tecla começou a ser pressionada
-                do barra.movimento(); //Move a barra (baseado na tecla que está sendo pressionada)
+                do barra.deslocamento(); //Move a barra (baseado na tecla que está sendo pressionada)
                 do Sys.wait(40); //Aguarda 40 millisegundos
 
             }

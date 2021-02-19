@@ -1,9 +1,82 @@
 class Bola{
 
-    field int xPosicao; // Posição da bola no eixo x
-    field int yPosicao; // Posição da bola no eixo y
+    field int xPosicao, yPosicao; //Posição da bola;
+    field boolean inveterDeslocamento; //A bola bateu na parede?
+    
+    field int paredeEsq, paredeCima, paredeDir, paredeBaixo; //Posição das 4 paredes;
+    field int ultimaParede; //Última parede em que a bola bateu;
 
-    field int paredeEsq, paredeDir, paredeCima, paredeBaixo; // Posição das 4 paredes
+    //Construtor - Constroi a bola, com base nas informações dadas, e as paredes;
+    constructor Bola novo(int xBola, int yBola){
+        let xPosicao = xBola; 
+        let yPosicao =  yBola
+
+        let paredeEsq = 0
+        let paredeCima = 0
+        let paredeDir = 506
+        let paredeBaixo = 235
+
+        let ultimaParede = 0 //Última parede em que a bola bateu (nenhuma = 0);
+
+        do mostrar()
+
+        return this
+
+    }
+
+    //Método - Encapsula a desalocação de um objeto da memória
+    method void dispose() { 
+        do Memory.deAlloc(this); // Desaloca o objeto "Bola"
+        return;
+
+    }
+
+            //Acessor - Permite que o acesso fora da classe à posição (eixo x) do INÍCIO barra seja possível; 
+    method int getEsquerda(){
+        return xPosicao; //Retorna a posição do INÍCIO da barra
+    }
+
+    //Acessor - Permite que o acesso fora da classe à posição (eixo x) do FIM barra seja possível; 
+    method int getDireita(){
+        return xPosicao + comprimento; //Retorna a posição do FIM da barra
+    }
+
+
+    //Método - Desenha um retângulo (5x5);
+    method void desenhar(){ 
+        do Screen.drawRectangle(xPosicao, yPosicao, xPosicao + 4, yPosicao + 4); //Usando a cor atual, desenha um retângulo preenchido;
+        return;
+    }
+    
+    //Método - "Mostra" a bola;
+    method void mostrar() { 
+        do Screen.setColor(true); //Define a cor para preto;
+        do desenhar(); //Desenha o retângulo preto (preenchido);
+        return;
+    }
+    
+    //Método - "Escode" a bola;
+    method void esconder() { 
+        do Screen.setColor(false); //Define a cor para branca;
+        do desenhar(); //Desenha o retângulo branco (preenchido);
+        return;
+    }
+
+    //Método - Define para onde a bola sdeve ir (destino)
+    method void destino(){
+
+        var int xDestino, yDestino; //Posição do destino da bola;
+        var int xDistancia, yDistacia; //Distância da localização atual para o destino;
+
+        let xDistancia = xDestino - xPosicao; //Calcula, no eixo x, a distância até o destino;
+        let yDistancia = yDestino - yPosicao; //Calcula, no eixo y, a distância até o destino;
+        let inveterDeslocamento = false; //Define se o deslocamento deve ser intertido;
+
+
+    }
+
+
+
 
 
 }
