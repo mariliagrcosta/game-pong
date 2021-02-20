@@ -62,20 +62,55 @@ class Bola{
         return;
     }
 
-    //Método - Define para onde a bola sdeve ir (destino)
-    method void destino(){
+    //Método - Define para onde a bola deve ir (destino)
+    method void destino(int xDestino, int yDestino){
 
-        var int xDestino, yDestino; //Posição do destino da bola;
-        var int xDistancia, yDistacia; //Distância da localização atual para o destino;
+        var int xDistancia, yDistacia; //Posição do destino da bola;
+        var int xDistanciaAbs, yDistanciaAbs; //Distância da localização atual para o destino;
 
         let xDistancia = xDestino - xPosicao; //Calcula, no eixo x, a distância até o destino;
         let yDistancia = yDestino - yPosicao; //Calcula, no eixo y, a distância até o destino;
-        let inveterDeslocamento = false; //Define se o deslocamento deve ser intertido;
+        let xDistanciaAbs = Math.abs(xDistancia)
+        let yDistanciaAbs = Math.abs(yDistancia)
 
+        let inveterDeslocamento = false; //Define se o deslocamento deve ser intertido;
 
     }
 
+    //Calcula qual foi a última parede que a bola bateu
+    method void parede(){
+        
+        if (x < paredeEsq){
 
+            let ultimaParede = 1; //Determina a última parede como a da esquerda (1)
+            let x = paredeEsq; //Determina o x como a posição da parede esquerda (evitar que o litime seja ultrapassado)
+
+        }
+
+        if (y < paredeCima){
+
+            let ultimaParede = 2; //Determina a última parede como a do topo (2)
+            let x = paredeCima; //Determina o y como a posição da parede do topo (evitar que o litime seja ultrapassado)
+
+        }
+
+        if (x > paredeDir){
+
+            let ultimaParede = 3; //Determina a última parede como a da direita (3)
+            let x = paredeDir; //Determina o x como a posição da parede direita (evitar que o litime seja ultrapassado)
+
+        }
+
+        if (y > paredeBaixo){
+
+            let ultimaParede = 4; //Determina a última parede como a de baixo - a barra (4)
+            let x = paredeBaixo; //Determina o y como a posição da parede de baixo - a barra (evitar que o litime seja ultrapassado)
+
+        }
+
+        return;
+
+    } 
 
 
 
