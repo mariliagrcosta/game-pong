@@ -65,6 +65,7 @@ class Jogo{
         do Output.moveCursor(13,23); //Seleciona onde vai aparecer a mensagem;
 	    do Output.printString("OBJETIVO: 15 PONTOS"); //Imprime "OBJETIVO: 15 PONTOS" no lugar escolhido;
         do Sys.wait(2500); //Espera 2 segundos e meio;
+        
         do Screen.clearScreen(); //Limpa a tela;
         return;
 

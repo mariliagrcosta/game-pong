@@ -14,11 +14,13 @@ class Bola{
 
 	    let x = xBola; //Define a posição da bola no eixo x;
 	    let y = yBola; //Define a posição da bola no eixo y;
+
 	    let parede = 0; //Última parede em que a bola bateu (nenhuma = 0);
 	    let paredeEsq = 0; //Posição da parede da esquerda;
 	    let paredeCima = 19; //Posição da parede de cima;
 	    let paredeDir = 506; //Posição da parede da direita (Retirado o tamanho da bola);
 	    let paredeBaixo = 224;  //Posição da parede de baixo (Retirado o tamanho da bola);
+        
         do mostrar(); //Mostrar a bola;
 
         return this;

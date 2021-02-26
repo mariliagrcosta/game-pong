@@ -15,6 +15,7 @@ class Barra{
         let comprimento = compBarra; //Comprimento da barra;
         let largura = 5; //Largura da barra no eixo x;
         let direcao = 0; //Direção inicial do movimento da barra (parado);
+        
         do mostrar(); //Mostrar a barra x;
 
         return this;
