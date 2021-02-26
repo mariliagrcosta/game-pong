@@ -1,13 +1,18 @@
-// Ponto de entrada do programa (primeira código a ser rodado)
-class Main{ 
-    
-    // Inicializa o jogo
-    function void main(){  
-        var Jogo jogoAtual;  //Declara a variável "jogoAtual"
-        do Jogo.novoJogo();  //"Gera" um novo jogo
-        let jogoAtual = Jogo.retornoJogo(); //Atribui o novo jogo a uma variável
-        do jogoAtual.start(); //Inicia o jogo
-        do jogoAtual.dispose(); //Descarta o jogo atual quando não for mais necessário
+// PONG GAME //
+
+// Ponto de entrada do programa;
+
+class Main{
+
+    // Inicializa o jogo;
+    function void main() {
+
+        var Jogo jogo; //Declara a variável "jogo";
+
+        do Jogo.novoJogo(); //"Gera" um novo jogo -> Seta os elementos que fazem parte do jogo (barra, bola, paredes..);
+        let jogo = Jogo.getJogo(); //Atribui o novo jogo a variável "jogo";
+        do jogo.start(); //Inicia o jogo;
+        do jogo.dispose(); //Descarta o jogo quando não for mais necessário (fim do jogo);
         return;
 
     }

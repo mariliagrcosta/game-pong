@@ -1,117 +1,239 @@
 class Bola{
 
-    field int xPosicao, yPosicao; //Posição da bola;
-    field boolean inveterDeslocamento; //A bola bateu na parede?
+    //Declaração das variáveis responsáveis por armazenar as informações referentes a classe "bola";
+    field int x, y; //Posição da bola;
+    field int xDistancia, yDistancia; //Distância do ponto até o destino (referência);
     
-    field int paredeEsq, paredeCima, paredeDir, paredeBaixo; //Posição das 4 paredes;
-    field int ultimaParede; //Última parede em que a bola bateu;
+    //Influenciam em que movimento será executado pela bola (linha reta/diagonal | baixo/cima | esquerda/direita);
+    field int movimentobase, movimentoD, movimentoLR; 
+    field boolean inverter, xPBool, yPBool; 
+    
+    field int paredeEsq, paredeDir, paredeCima, paredeBaixo; //Posição das 4 paredes;
+    field int parede; //Última parede em que a bola bateu;
+    
+    //Construtor - Constroi a bola e as paredes;
+    constructor Bola novo(int xBola, int yBola) {  
 
-    //Construtor - Constroi a bola, com base nas informações dadas, e as paredes;
-    constructor Bola novo(int xBola, int yBola){
-        let xPosicao = xBola; 
-        let yPosicao =  yBola
+	    let x = xBola; //Define a posição da bola no eixo x;
+	    let y = yBola; //Define a posição da bola no eixo y;
+	    let parede = 0; //Última parede em que a bola bateu (nenhuma = 0);
+	    let paredeEsq = 0; //Posição da parede da esquerda;
+	    let paredeCima = 19; //Posição da parede de cima;
+	    let paredeDir = 506; //Posição da parede da direita (Retirado o tamanho da bola);
+	    let paredeBaixo = 224;  //Posição da parede de baixo (Retirado o tamanho da bola);
+        do mostrar(); //Mostrar a bola;
 
-        let paredeEsq = 0
-        let paredeCima = 0
-        let paredeDir = 506
-        let paredeBaixo = 235
-
-        let ultimaParede = 0 //Última parede em que a bola bateu (nenhuma = 0);
-
-        do mostrar()
-
-        return this
-
+        return this;
     }
 
     //Método - Encapsula a desalocação de um objeto da memória
-    method void dispose() { 
-        do Memory.deAlloc(this); // Desaloca o objeto "Bola"
-        return;
-
-    }
-
-            //Acessor - Permite que o acesso fora da classe à posição (eixo x) do INÍCIO barra seja possível; 
-    method int getEsquerda(){
-        return xPosicao; //Retorna a posição do INÍCIO da barra
-    }
-
-    //Acessor - Permite que o acesso fora da classe à posição (eixo x) do FIM barra seja possível; 
-    method int getDireita(){
-        return xPosicao + comprimento; //Retorna a posição do FIM da barra
-    }
-
-
-    //Método - Desenha um retângulo (5x5);
-    method void desenhar(){ 
-        do Screen.drawRectangle(xPosicao, yPosicao, xPosicao + 4, yPosicao + 4); //Usando a cor atual, desenha um retângulo preenchido;
+    method void dispose() {
+        do Memory.deAlloc(this);
         return;
     }
-    
-    //Método - "Mostra" a bola;
-    method void mostrar() { 
-        do Screen.setColor(true); //Define a cor para preto;
+
+    //Acessor - Permite que o acesso, fora da classe, ao "x" (lado esquerdo da bola) seja possível; 
+    method int getLEsquerdo() {
+        return x;
+    }
+
+    //Acessor - Permite que o acesso, fora da classe, ao "x + tamanho" (lado direito da bola) seja possível; 
+    method int getLDireito() {
+        return x + 4;
+    }
+
+    //Método - Desenha um retângulo;
+    method void desenhar() {
+	    do Screen.drawRectangle(x, y, x + 4, y + 4); //Usando a cor escolhida, desenha um retângulo preenchido;
+	    return;
+    }
+
+    //Método - "Mostra" a barra;
+    method void mostrar() {
+        do Screen.setColor(true); //Cor: preto;
         do desenhar(); //Desenha o retângulo preto (preenchido);
         return;
     }
-    
-    //Método - "Escode" a bola;
-    method void esconder() { 
-        do Screen.setColor(false); //Define a cor para branca;
+
+    //Método - "Esconde" a barra;
+    method void esconder() {
+        do Screen.setColor(false); //Cor: branco;
         do desenhar(); //Desenha o retângulo branco (preenchido);
         return;
     }
 
-    //Método - Define para onde a bola deve ir (destino)
-    method void destino(int xDestino, int yDestino){
 
-        var int xDistancia, yDistacia; //Posição do destino da bola;
-        var int xDistanciaAbs, yDistanciaAbs; //Distância da localização atual para o destino;
+    //Método - Computa o destino da bola e calcula as variáveis que coorderão o deslocamento da bola até o destino;
+    method void destino(int xDestino, int yDestino) {
+        
+        var int aux; //Variável auxiliar
+        var int xDistanciaMod, yDistanciaMod; //Variável local - Armazenará a distância entre a posição atual da bola e o destino;
+  	    
+        let xDistancia = xDestino - x; //Diferença entre a posição atual da bola e o destino - eixo x;
+	    let yDistancia = yDestino - y; //Diferença entre a posição atual da bola e o destino - eixo y;
+        let xDistanciaMod = Math.abs(xDistancia); //Valor absoluto da variável "xDistancia" ;
+        let yDistanciaMod = Math.abs(yDistancia); //Valor absoluto da variável "yDistancia";
+        let inverter = (xDistanciaMod < yDistanciaMod); //se xDistanciaMod < yDistanciaMod, inverter = True;
 
-        let xDistancia = xDestino - xPosicao; //Calcula, no eixo x, a distância até o destino;
-        let yDistancia = yDestino - yPosicao; //Calcula, no eixo y, a distância até o destino;
-        let xDistanciaAbs = Math.abs(xDistancia)
-        let yDistanciaAbs = Math.abs(yDistancia)
+        if (inverter) {
+            
+            //Troca o valor de xDistanciaMod com o yDistanciaMod;
+            let aux = xDistanciaMod; 
+            let xDistanciaMod = yDistanciaMod;
+            let yDistanciaMod = aux; 
+   	        let xPBool = (y < yDestino); //Se xPBool = True -> Necessário aumentar o valor do y para chegar ao destino;
+            let yPBool = (x < xDestino); //Se yPBool = True -> Necessário aumentar o valor do x para chegar ao destino;
+        }
+        else {
+	        let xPBool = (x < xDestino); //Se xPBool = True -> Necessário aumentar o valor do x para chegar ao destino;
+            let yPBool = (y < yDestino); //Se yPBool = True -> Necessário aumentar o valor do y para chegar ao destino;
+        }
 
-        let inveterDeslocamento = false; //Define se o deslocamento deve ser intertido;
+        //Variáveis que serão usadas para definiar cada movimento da bola até o destino (linha reta/diagonal);    
+        let movimentobase = (3 * yDistanciaMod) - xDistanciaMod;
+        let movimentoLR = 3 * yDistanciaMod;
+        let movimentoD = 3 * (yDistanciaMod - xDistanciaMod);
 
+	    return;
     }
 
-    //Calcula qual foi a última parede que a bola bateu
-    method void parede(){
-        
-        if (x < paredeEsq){
+    //Método - Quando a bola atingir uma parede -> Retorna o número referente a parede que foi atingida;
+    method void colisao(){
 
-            let ultimaParede = 1; //Determina a última parede como a da esquerda (1)
-            let x = paredeEsq; //Determina o x como a posição da parede esquerda (evitar que o litime seja ultrapassado)
+        //Se a posição da bola no eixo x for menor que a posição da parede esquerda;
+        if (x < paredeEsq) {
+	        let parede = 1; //Define "parede" como 1 (esquerda);
+	        let x = paredeEsq; //Define o "x" como a posição da parede esquerda -> Mantém a bola no limite da tela;
+	    }
 
+        //Se a posição da bola no eixo y for menor que a posição da parede de cima;
+        if (y < paredeCima) {
+            let parede = 2; //Define "parede" como 2 (cima);
+	        let y = paredeCima; //Define o "y" como a posição da parede de cima -> Mantém a bola no limite da tela;
         }
 
-        if (y < paredeCima){
+        //Se a posição da bola no eixo x for maior que a posição da parede direita;
+        if (x > paredeDir) {
+	        let parede = 3; //Define "parede" como 3 (direita);
+	        let x = paredeDir; //Define o "x" como a posição da parede direita -> Mantém a bola no limite da tela;
+	    }
 
-            let ultimaParede = 2; //Determina a última parede como a do topo (2)
-            let x = paredeCima; //Determina o y como a posição da parede do topo (evitar que o litime seja ultrapassado)
-
-        }
-
-        if (x > paredeDir){
-
-            let ultimaParede = 3; //Determina a última parede como a da direita (3)
-            let x = paredeDir; //Determina o x como a posição da parede direita (evitar que o litime seja ultrapassado)
-
-        }
-
-        if (y > paredeBaixo){
-
-            let ultimaParede = 4; //Determina a última parede como a de baixo - a barra (4)
-            let x = paredeBaixo; //Determina o y como a posição da parede de baixo - a barra (evitar que o litime seja ultrapassado)
-
+        //Se a posição da bola no eixo y for maior que a posição da parede de baixo;
+        if (y > paredeBaixo) {
+            let parede = 4; //Define "parede" como 4 (baixo);       
+	        let y = paredeBaixo; //Define o "y" como a posição da parede de baixo -> Mantém a bola no limite da tela;
         }
 
         return;
+    }
 
-    } 
+    //Método - Aos poucos, move a bola até o destino;
+    method int deslocamento() {
 
+	    do esconder(); //Esconde a bola;
 
+        //Dependendo das informações calculadas no método "destino", desloca a bola em direção ao destino;
+        //Retorna o valor referente a última parede que a bola bateu;
+        if (movimentobase < 0) { //Se "movimentobase" < 0 -> Linha reta (uma direção);
+            let movimentobase = movimentobase + movimentoLR;
+        }
+        else { //Se "movimentobase" >= 0 -> Diagonal (duas direções);
 
+            let movimentobase = movimentobase + movimentoD;
+            
+            if (yPBool) { //Se yPBool = True;
+                if (inverter) { //Se inverter = True;
+                    let x = x + 3;
+                }
+                else { //Se inverter = False;
+                    let y = y + 3; 
+                }
+            }
+            
+            else { //Se yPBool = False;
+                if (inverter) { //Se inverter = True;
+                    let x = x - 3; 
+                }
+                else { //Se inverter = False;
+                    let y = y - 3; 
+                }
+            }
+	    }
+
+        if (xPBool) { //Se xPBool = True;
+            if (inverter) { //Se inverter = True;
+                let y = y + 3; 
+            }
+            else { //Se inverter = False;
+                let x = x + 3; 
+            }
+	    }
+	    else { //Se xPBool = False;
+            if (inverter) { //Se inverter = True;
+                let y = y - 3; 
+            }
+            else { //Se inverter = False;
+                let x = x - 3; 
+            }
+	    }
+
+        do colisao(); //Chama o método "parede" para checar se a bola chegou colidiu com alguma parede;
+
+	    do mostrar(); //Mostra a bola (posição atualizada);
+
+        return parede; //Retorna o valor referente a última parede que foi atingida pela bola;
+    }
+    
+    //Após a bola atingir uma nova parede -> Calcula o novo ponto de destino;
+    method void bolaRebater(int rebatidaDirecao) {
+        
+        var int xNovo, yNovo, xDistPropor, yDistPropor, rebatidaValor, xPropor, yPropor; //Declaração de variáveis locais;
+
+        //Diminui a ordem de grandeza da diferença entre o que foi percorrido do x até o último destino (mantém a proporção); 
+        let xDistPropor = xDistancia / 10; 
+        let yDistPropor = yDistancia / 10;
+
+        //Se a direção de rebatida for 0;
+	    if (rebatidaDirecao = 0) { 
+            let rebatidaValor = 12; //Valor relativo ao rebatimento da bola (6/12/24);
+        }
+        //Se a direção em que a bola for rebatida não for 0;
+	    else {
+            //Depedendo da diferença x até o último destino e a direção em que a bola for rebatida;
+	        if (((~(xDistancia < 0)) & (rebatidaDirecao = 1)) | ((xDistancia < 0) & (rebatidaDirecao = (-1)))) {
+                let rebatidaValor = 24; //Valor relativo ao rebatimento da bola (6/12/24);
+            }
+	        else { 
+                let rebatidaValor = 6; //Valor relativo ao rebatimento da bola (6/12/24);
+            } 
+	    }
+
+	    if (parede = 1) { //Se a parede 1 foi a atingida;
+	        let xNovo = 511; //Define o novo valor do x;
+	        let yPropor = (yDistPropor * (-51)) / xDistPropor; //Calcula o novo valor do y, baseado no deslocamento que foi feito anteriormente,
+            let yNovo = y + (yPropor * rebatidaValor);         //na atual posição do y e na maneira que a bola foi rebatida ao atingir a parede;
+	    }
+        else {
+            if (parede = 2) { //Se a parede 2 foi a atingida;
+		        let yNovo = 255; //Define o novo valor do y;
+		        let xPropor = (xDistPropor * (-25)) / yDistPropor; //Calcula o novo valor do x, baseado no deslocamento que foi feito anteriormente,
+                let xNovo = x + (xPropor * rebatidaValor);         //na atual posição do x e na maneira que a bola foi rebatida ao atingir a parede;
+	        }
+	        else {
+                if (parede = 3) { //Se a parede 3 foi a atingida;
+                    let xNovo = 0;//Define o novo valor do x;
+                    let yPropor = (yDistPropor * 51) / xDistPropor; //Calcula o novo valor do y, baseado no deslocamento que foi feito anteriormente,
+                    let yNovo = y + (yPropor * rebatidaValor);      //na atual posição do y e na maneira que a bola foi rebatida ao atingir a parede;
+		        }
+                else { //Se a parede 4 foi a atingida;
+		            let yNovo = 0; //Define o novo valor do y;
+		            let xPropor = (xDistPropor * 25) / yDistPropor; //Calcula o novo valor do x, baseado no deslocamento que foi feito anteriormente,
+                    let xNovo = x + (xPropor * rebatidaValor);      //na atual posição do x e na maneira que a bola foi rebatida ao atingir a parede;
+		        }
+            }
+        }
+
+        do destino(xNovo, yNovo); //Chama o método "destino" para que as variáveis que definem o deslocamento da bola sejam calculadas com base no novo destino;
+        return;
+    }
 }

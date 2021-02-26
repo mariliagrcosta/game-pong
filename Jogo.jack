@@ -1,84 +1,227 @@
-class Jogo {
+// PONG GAME //
 
-    static Jogo jogoAtual; //Jogo
+/**
+NOTAS:
+ - Field: Cada instância de objeto da classe tem uma cópia privada desse tipo de variável;
+ - Static: Existe apenas uma cópia de cada variável estática, e esta cópia é compartilhada por todas as instâncias de objeto da classe;
+ - Var: Usada por sub-rotinas, existem apenas enquanto a sub-rotina está em execução;
 
-    field int score; //Pontuação
-    field Barra barra; //A barra
-    field int barraComprimentoAtual; //Comprimento atual da barra
-    field Bola bola; //A bola
+ - Dispose(): De maneira convencional, toda classe deve conter o método "dispose()";
 
-    field boolean gameOver; //O jogo acabou?
+ - Accessors: A única maneira de acessar um valor (field) fora da classe é por meio de deles;
+*/
 
+class Jogo{
+
+    static Jogo jogoAtual; //O jogo;
+
+    field int score; //A pontuação;
+    field Barra barra; //A barra;
+    field int barraComprimentoAtual; //Comprimento atual da barra;
+    field Bola bola; //A bola;
+    field int paredeAtual; //Últimas informações sobre a parede (atualiza quando a parede é atingida);
+    field int ultimaParede; //Última parede a ter sido atingida;
+
+    field boolean fimJogo; //O jogo acabou?
+    field boolean vitoria; //O jogo foi vencido?
 
     //Constroi um novo jogo
-    constructor Jogo novo() { 
-        do Screen.clearScreen(); //Limpa a tela
-        let barraComprimentoAtual = 80; //Comprimento inicial da barra
-        let barra = Barra.novo(215, 240, barraComprimentoAtual, 5); //Define a barra
-        do Screen.drawRectangle(0, 12, 511, 18); //Limite superior 
-        do Output.printString("Score: 0"); //Imprime "Score:0" no canto superior esquerdo
+    constructor Jogo novo() {
+        
+        do inicio(); //Tela de início;
 
-        let score = 0; //Pontuação
-        let gameOver = false; //Jogo não acabou
+	    let fimJogo = false; //Define que o jogo não acabou ainda;
+        do Output.moveCursor(0,0); //Seleciona onde vai aparecer a mensagem (canto superior esquerdo);
+        do Output.printString("Score: 0"); //Imprime "Score: 0" no lugar escolhido;
+	    let score = 0; //Pontuação zerada
+
+        let barraComprimentoAtual = 60; //Comprimento inicial da barra
+        let barra = Barra.novo(225, 229, barraComprimentoAtual); //Define a barra (objeto);
+        let bola = Bola.novo(253, 220); //Define a bola (objeto);
+        do bola.destino(160,0);//Primeiro destino da bola;
+        do Screen.drawRectangle(0, 12, 511, 18); //Limite superior (parede 2);
 
         return this;
     }
 
-    //Método - Encapsula a desalocação de um objeto da memória
-    method void dispose() { 
-        do barra.dispose(); //Descarta a barra
-        do Memory.deAlloc(this); //Desaloca o objeto "Jogo"
+    //Método - Encapsula a desalocação de objetos da memória
+    method void dispose() {
+
+        do barra.dispose(); //Descarta a barra;
+	    do bola.dispose(); //Descarta a bola;
+        do Memory.deAlloc(this); //Descarta o próprio objeto (jogo);
         return;
     }
 
     //Função - Define um novo jogo
     function void novoJogo() {
-        let jogoAtual = Jogo.novo(); //Atribui as informações referentes ao novo jogo a variável "jogoAtual"
+        let jogoAtual = Jogo.novo(); //Atribui o jogo (objeto) já com as informações iniciais definidas a variável "jogoAtual";
         return;
     }
     
-    //Função - Retorna a variável com as configurações referentes ao novo jogo
-    function Jogo retornoJogo() {
+    //Acessor - Retorna a variável, "jogoAtual", que foi anteriormente definida;
+    function Jogo getJogo() {
         return jogoAtual;
     }
-    
+
+    //Tela Inicial
+    method void inicio(){
+        
+        do Screen.clearScreen(); 
+
+        do Output.moveCursor(10,28); //Seleciona onde vai aparecer a mensagem;
+	    do Output.printString("BOM JOGO!"); //Imprime "BOM JOGO!" no lugar escolhido;
+        do Output.moveCursor(13,23); //Seleciona onde vai aparecer a mensagem;
+	    do Output.printString("OBJETIVO: 15 PONTOS"); //Imprime "OBJETIVO: 15 PONTOS" no lugar escolhido;
+        do Sys.wait(2500); //Espera 2 segundos e meio;
+        do Screen.clearScreen(); //Limpa a tela;
+        return;
+
+    }
+
+    //Tela de Derrota
+    method void derrotaTela(){
+        
+        do Screen.clearScreen();
+
+        do Output.moveCursor(10,26); //Seleciona onde vai aparecer a mensagem;
+	    do Output.printString("VOCE PERDEU!"); //Imprime "VOCE PERDEU!" no lugar escolhido;
+        do Output.moveCursor(12,28); //Seleciona onde vai aparecer a mensagem;
+	    do Output.printString("SCORE: "); //Imprime "SCORE: " no lugar escolhido;
+        do Output.moveCursor(12,35); //Seleciona onde vai aparecer a mensagem;
+        do Output.printInt(score); //Imprime ao lado do "SCORE: " a pontuação obtida até aquele momento;
+
+        return;
+
+    }
+
+    //Tela de Vitória
+    method void vitoriaTela(){
+        
+        do Screen.clearScreen();
+
+        do Output.moveCursor(10,25); //Seleciona onde vai aparecer a mensagem;
+	    do Output.printString("VOCE VENCEU!"); //Imprime "VOCE VENCEU!" no lugar escolhido;
+        do Output.moveCursor(12,27); //Seleciona onde vai aparecer a mensagem;
+	    do Output.printString("SCORE: "); //Imprime "SCORE: " no lugar escolhido;
+        do Output.moveCursor(12,34); //Seleciona onde vai aparecer a mensagem;
+        do Output.printInt(score); //Imprime ao lado do "SCORE: " a pontuação obtida até aquele momento;
+
+        return;
+
+    }
+
     // Método - Começa o jogo
-    method void start(){
-        var char tecla;  //Saídas do teclado
+    method void start() {
 
-        //Enquanto o jogo ainda não tiver terminado
-        while (~gameOver){ 
-            //Enquanto o output do teclado for 0 (nenhuma tecla pressionada) e o jogo não tiver terminado
-            while ((tecla = 0) & (~gameOver)){
-                let tecla = Keyboard.keyPressed(); //Atribui a "tecla" o output do telaco (número referente a tecla que está sebndo pressionada)
-                //do barra.definirDirecao(0); //A barra para de se movimentar quando nenhuma tecla está sendo pressionada
-                do barra.descolamento(); //Move a barra (movimento continua baseado na última tecla pressionada)
-                do Sys.wait(40); //Aguarda 40 millisegundos
+        var char tecla; //Saídas do teclado;
 
+        //Enquanto o jogo ainda não tiver terminado;
+        while (~fimJogo) {
+
+            //Enquanto o input do teclado for 0 (nenhuma tecla pressionada) e o jogo não tiver terminado;
+            while ((tecla = 0) & (~fimJogo)) {
+
+                let tecla = Keyboard.keyPressed(); //Checa se alguma tecla começou a ser pressionada;
+                //do barra.definirDirecao(0); //A barra para de se movimentar quando nenhuma tecla está sendo pressionada;
+                do barra.deslocamento(); //Move a barra (o movimento continua baseado na última tecla pressionada);
+                do bolaMovimento(); //Move a bola em direção ao destino esperado;
+                do Sys.wait(36); //Aguarda 36 millisegundos
             }
 
-            if (tecla = 130){ //Se o output do teclado for 130 (seta esquerda)
-                do barra.definirDirecao(1); //Definir a direção do movimento para esquerda
+            if (tecla = 130) { //Se o input do teclado for 130 (seta esquerda);
+                do barra.definirDirecao(1);  //Define a direção do movimento para esquerda;
             }
-            else{
-                if (tecla = 132){ //Se o output do teclado for 132 (seta direita)
-                    do barra.definirDirecao(2); //Definir a direção do movimento para direita
+	        else {
+	            if (tecla = 132) { //Se o input do teclado for 132 (seta direita);
+                    do barra.definirDirecao(2); //Define a direção do movimento para direita;
                 }
             }
-            
-            //Enquanto o output do teclado for diferente de 0 (alguma tecla pressionada) e o jogo não tiver terminado
-            while ((~(tecla = 0)) & (~gameOver)){ 
-                let tecla = Keyboard.keyPressed(); //Checar se alguma tecla começou a ser pressionada
-                do barra.deslocamento(); //Move a barra (baseado na tecla que está sendo pressionada)
-                do Sys.wait(40); //Aguarda 40 millisegundos
 
+            //Enquanto o input do teclado for diferente de 0 (alguma tecla está sendo pressionada) e o jogo não tiver terminado;
+            while ((~(tecla = 0)) & (~fimJogo)) {
+                let tecla = Keyboard.keyPressed(); //Checa se alguma/outra tecla começou a ser pressionada;
+                do barra.deslocamento(); //Move a barra (baseado na tecla que está sendo pressionada);
+                do bolaMovimento(); //Move a bola em direção ao destino esperado;
+                do Sys.wait(36); //Aguarda 36 millisegundos;
             }
         }
 
-        return;
+        //Se o jogo terminou
+	    if (fimJogo) {
 
+            //Se o jogador venceu o jogo;
+            if (vitoria) { 
+                do vitoriaTela(); //Mostra tela de vitória;
+            } 
+
+            //Se o jogador perdeu o jogo;
+            else { 
+                do derrotaTela(); //Mostra tela de derrota;
+            }
+            
+	    }
+            
+        return;
     }
 
-    
+    //Movimento da bola
+    method void bolaMovimento() {
 
+        var int rebatidaDirecao, barraLEsq, barraLDir, bolaLEsq, bolaLDir;
+
+        let paredeAtual = bola.deslocamento(); //Atribui a variável "paredeAtual" a última parede que foi atingida (checagem feita a cada pequeno movimento da bola);
+        
+        //Confere se paredeAtual != 0 e se paredeAtual != ultimaParede (nova parede atingida);
+        if ((~(paredeAtual = 0)) & (~(paredeAtual = ultimaParede))) {
+            let ultimaParede = paredeAtual; //Variável "últimaParede" é atualizada com o número da parede atingida;
+            let rebatidaDirecao = 0; //Determina a forma que a bola vai rebater ( 0 - centro);
+            let barraLEsq = barra.getLEsquerdo(); //Variável recebe a posição do lado esquerdo da barra;
+            let barraLDir = barra.getLDireito(); //Variável recebe a posição do lado direito da barra;
+            let bolaLEsq = bola.getLEsquerdo(); //Variável recebe a posição do lado esquerdo da bola;
+            let bolaLDir = bola.getLDireito(); //Variável recebe a posição do lado direito da bola;
+
+            //Se a parede atingida for a 4 (parede de baixo);
+            if (paredeAtual = 4) {
+                let fimJogo = (barraLEsq > bolaLDir) | (barraLDir < bolaLEsq); //Jogo acaba se a bola não atingiu a barra e passou direito;
+
+                //Confere se o jogo terminou;
+                if (~fimJogo) {
+
+                    //Se a bola atingiu a barra mais para o lado esquerdo;
+                    if (bolaLDir < (barraLEsq + 12)) { 
+                        let rebatidaDirecao = -1; //Determina a forma que a bola vai rebater;
+                    }
+
+                    //Se a bola atingiu a barra mais para o lado direito;
+                    else {
+                        if (bolaLEsq > (barraLDir - 12)) { 
+                            let rebatidaDirecao = 1; //Determina a forma que a bola vai rebater;
+                        }
+                    }
+
+                    let barraComprimentoAtual = barraComprimentoAtual - 3; //Diminui 3 do comprimento da barra;
+                    do barra.definirTamanho(barraComprimentoAtual); //Define o novo comprimento da barra;      
+                    let score = score + 1; //Aumenta 1 à variável "score";
+                    do Output.moveCursor(0,7); //Seleciona onde vai aparecer a mensagem;
+                    do Output.printInt(score); //Atualiza a nova pontuação na tela;
+
+                    //Se a pontuação for igual a 15;
+                    if (score = 15){
+
+                        let vitoria = true; //Vitória;
+                        let fimJogo = true; //Fim de jogo;
+
+                    }
+
+                }
+            }
+
+            //Após a bola ter atingido a parede, chama o método que irá definir o novo destino da bola;
+            do bola.bolaRebater(rebatidaDirecao);
+            
+        }
+
+        return;
+    }
 }

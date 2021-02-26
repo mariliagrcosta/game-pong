@@ -1,7 +1,7 @@
 function Main.main 1
 call Jogo.novoJogo 0
 pop temp 0
-call Jogo.retornoJogo 0
+call Jogo.getJogo 0
 pop local 0
 push local 0
 call Jogo.start 1
