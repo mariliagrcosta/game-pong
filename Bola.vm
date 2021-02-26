@@ -1,4 +1,4 @@
-function Bola.novo 0
+function Bola.new 0
 push constant 15
 call Memory.alloc 1
 pop pointer 0
@@ -7,27 +7,19 @@ pop this 0
 push argument 1
 pop this 1
 push constant 0
-pop this 14
-push constant 0
 pop this 10
-push constant 19
-pop this 12
-push constant 506
+push constant 0
 pop this 11
-push constant 224
+push constant 19
 pop this 13
+push constant 506
+pop this 12
+push constant 224
+pop this 14
 push pointer 0
 call Bola.mostrar 1
 pop temp 0
 push pointer 0
-return
-function Bola.dispose 0
-push argument 0
-pop pointer 0
-push pointer 0
-call Memory.deAlloc 1
-pop temp 0
-push constant 0
 return
 function Bola.getLEsquerdo 0
 push argument 0
@@ -151,47 +143,47 @@ function Bola.colisao 0
 push argument 0
 pop pointer 0
 push this 0
-push this 10
+push this 11
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 1
-pop this 14
-push this 10
+pop this 10
+push this 11
 pop this 0
 label IF_FALSE0
 push this 1
-push this 12
+push this 13
 lt
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push constant 2
-pop this 14
-push this 12
+pop this 10
+push this 13
 pop this 1
 label IF_FALSE1
 push this 0
-push this 11
+push this 12
 gt
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push constant 3
-pop this 14
-push this 11
+pop this 10
+push this 12
 pop this 0
 label IF_FALSE2
 push this 1
-push this 13
+push this 14
 gt
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push constant 4
-pop this 14
-push this 13
+pop this 10
+push this 14
 pop this 1
 label IF_FALSE3
 push constant 0
@@ -299,7 +291,7 @@ pop temp 0
 push pointer 0
 call Bola.mostrar 1
 pop temp 0
-push this 14
+push this 10
 return
 function Bola.bolaRebater 7
 push argument 0
@@ -350,7 +342,7 @@ push constant 6
 pop local 4
 label IF_END1
 label IF_END0
-push this 14
+push this 10
 push constant 1
 eq
 if-goto IF_TRUE2
@@ -373,7 +365,7 @@ add
 pop local 1
 goto IF_END2
 label IF_FALSE2
-push this 14
+push this 10
 push constant 2
 eq
 if-goto IF_TRUE3
@@ -396,7 +388,7 @@ add
 pop local 0
 goto IF_END3
 label IF_FALSE3
-push this 14
+push this 10
 push constant 3
 eq
 if-goto IF_TRUE4
@@ -439,6 +431,14 @@ push pointer 0
 push local 0
 push local 1
 call Bola.destino 3
+pop temp 0
+push constant 0
+return
+function Bola.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return

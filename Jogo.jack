@@ -26,7 +26,7 @@ class Jogo{
     field boolean vitoria; //O jogo foi vencido?
 
     //Constroi um novo jogo
-    constructor Jogo novo() {
+    constructor Jogo new() {
         
         do inicio(); //Tela de início;
 
@@ -36,31 +36,22 @@ class Jogo{
 	    let score = 0; //Pontuação zerada
 
         let barraComprimentoAtual = 60; //Comprimento inicial da barra
-        let barra = Barra.novo(225, 229, barraComprimentoAtual); //Define a barra (objeto);
-        let bola = Bola.novo(253, 220); //Define a bola (objeto);
+        let barra = Barra.new(225, 229, barraComprimentoAtual); //Define a barra (objeto);
+        let bola = Bola.new(253, 220); //Define a bola (objeto);
         do bola.destino(160,0);//Primeiro destino da bola;
         do Screen.drawRectangle(0, 12, 511, 18); //Limite superior (parede 2);
 
         return this;
     }
 
-    //Método - Encapsula a desalocação de objetos da memória
-    method void dispose() {
-
-        do barra.dispose(); //Descarta a barra;
-	    do bola.dispose(); //Descarta a bola;
-        do Memory.deAlloc(this); //Descarta o próprio objeto (jogo);
-        return;
-    }
-
-    //Função - Define um novo jogo
+    //Fução - Define um novo jogo
     function void novoJogo() {
-        let jogoAtual = Jogo.novo(); //Atribui o jogo (objeto) já com as informações iniciais definidas a variável "jogoAtual";
+        let jogoAtual = Jogo.new(); //Atribui o jogo (objeto) já com as informações iniciais definidas a variável "jogoAtual";
         return;
     }
     
-    //Acessor - Retorna a variável, "jogoAtual", que foi anteriormente definida;
-    function Jogo getJogo() {
+    //Função - Retorna a variável, "jogoAtual", que foi anteriormente definida;
+    function Jogo retornarJogo() {
         return jogoAtual;
     }
 
@@ -123,18 +114,18 @@ class Jogo{
             while ((tecla = 0) & (~fimJogo)) {
 
                 let tecla = Keyboard.keyPressed(); //Checa se alguma tecla começou a ser pressionada;
-                //do barra.definirDirecao(0); //A barra para de se movimentar quando nenhuma tecla está sendo pressionada;
+                //do barra.setDirecao(0); //A barra para de se movimentar quando nenhuma tecla está sendo pressionada;
                 do barra.deslocamento(); //Move a barra (o movimento continua baseado na última tecla pressionada);
                 do bolaMovimento(); //Move a bola em direção ao destino esperado;
-                do Sys.wait(36); //Aguarda 36 millisegundos
+                do Sys.wait(37); //Aguarda 37 millisegundos
             }
 
             if (tecla = 130) { //Se o input do teclado for 130 (seta esquerda);
-                do barra.definirDirecao(1);  //Define a direção do movimento para esquerda;
+                do barra.setDirecao(1);  //Define a direção do movimento para esquerda;
             }
 	        else {
 	            if (tecla = 132) { //Se o input do teclado for 132 (seta direita);
-                    do barra.definirDirecao(2); //Define a direção do movimento para direita;
+                    do barra.setDirecao(2); //Define a direção do movimento para direita;
                 }
             }
 
@@ -143,7 +134,7 @@ class Jogo{
                 let tecla = Keyboard.keyPressed(); //Checa se alguma/outra tecla começou a ser pressionada;
                 do barra.deslocamento(); //Move a barra (baseado na tecla que está sendo pressionada);
                 do bolaMovimento(); //Move a bola em direção ao destino esperado;
-                do Sys.wait(36); //Aguarda 36 millisegundos;
+                do Sys.wait(37); //Aguarda 37 millisegundos;
             }
         }
 
@@ -201,7 +192,7 @@ class Jogo{
                     }
 
                     let barraComprimentoAtual = barraComprimentoAtual - 3; //Diminui 3 do comprimento da barra;
-                    do barra.definirTamanho(barraComprimentoAtual); //Define o novo comprimento da barra;      
+                    do barra.setTamanho(barraComprimentoAtual); //Define o novo comprimento da barra;      
                     let score = score + 1; //Aumenta 1 à variável "score";
                     do Output.moveCursor(0,7); //Seleciona onde vai aparecer a mensagem;
                     do Output.printInt(score); //Atualiza a nova pontuação na tela;
@@ -224,4 +215,14 @@ class Jogo{
 
         return;
     }
+
+    //Método - Encapsula a desalocação de objetos da memória
+    method void dispose() {
+
+        do barra.dispose(); //Descarta a barra;
+	    do bola.dispose(); //Descarta a bola;
+        do Memory.deAlloc(this); //Descarta o próprio objeto (jogo);
+        return;
+    }
+
 }

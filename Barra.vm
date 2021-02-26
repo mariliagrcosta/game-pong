@@ -1,4 +1,4 @@
-function Barra.novo 0
+function Barra.new 0
 push constant 5
 call Memory.alloc 1
 pop pointer 0
@@ -16,14 +16,6 @@ push pointer 0
 call Barra.mostrar 1
 pop temp 0
 push pointer 0
-return
-function Barra.dispose 0
-push argument 0
-pop pointer 0
-push pointer 0
-call Memory.deAlloc 1
-pop temp 0
-push constant 0
 return
 function Barra.getLEsquerdo 0
 push argument 0
@@ -75,14 +67,14 @@ call Barra.desenhar 1
 pop temp 0
 push constant 0
 return
-function Barra.definirDirecao 0
+function Barra.setDirecao 0
 push argument 0
 pop pointer 0
 push argument 1
 pop this 4
 push constant 0
 return
-function Barra.definirTamanho 0
+function Barra.setTamanho 0
 push argument 0
 pop pointer 0
 push pointer 0
@@ -210,5 +202,13 @@ add
 call Screen.drawRectangle 4
 pop temp 0
 label IF_END0
+push constant 0
+return
+function Barra.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
 push constant 0
 return

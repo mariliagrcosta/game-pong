@@ -3,16 +3,14 @@ class Bola{
     //Declaração das variáveis responsáveis por armazenar as informações referentes a classe "bola";
     field int x, y; //Posição da bola;
     field int xDistancia, yDistancia; //Distância do ponto até o destino (referência);
-    
     //Influenciam em que movimento será executado pela bola (linha reta/diagonal | baixo/cima | esquerda/direita);
     field int movimentobase, movimentoD, movimentoLR; 
     field boolean inverter, xPBool, yPBool; 
-    
-    field int paredeEsq, paredeDir, paredeCima, paredeBaixo; //Posição das 4 paredes;
     field int parede; //Última parede em que a bola bateu;
+    field int paredeEsq, paredeDir, paredeCima, paredeBaixo; //Posição das 4 paredes;
     
     //Construtor - Constroi a bola e as paredes;
-    constructor Bola novo(int xBola, int yBola) {  
+    constructor Bola new(int xBola, int yBola) {  
 
 	    let x = xBola; //Define a posição da bola no eixo x;
 	    let y = yBola; //Define a posição da bola no eixo y;
@@ -24,12 +22,6 @@ class Bola{
         do mostrar(); //Mostrar a bola;
 
         return this;
-    }
-
-    //Método - Encapsula a desalocação de um objeto da memória
-    method void dispose() {
-        do Memory.deAlloc(this);
-        return;
     }
 
     //Acessor - Permite que o acesso, fora da classe, ao "x" (lado esquerdo da bola) seja possível; 
@@ -236,4 +228,11 @@ class Bola{
         do destino(xNovo, yNovo); //Chama o método "destino" para que as variáveis que definem o deslocamento da bola sejam calculadas com base no novo destino;
         return;
     }
+
+    //Método - Encapsula a desalocação de um objeto da memória
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
 }

@@ -8,7 +8,7 @@ class Barra{
     field int direcao; //Direção do movimento da barra (parado - 0, esquerda - 1, direita - 2);
 
     //Construtor - Constroi a barra com base nas informações dadas;
-    constructor Barra novo(int xBarra, int yBarra, int compBarra) { //Parâmetros;
+    constructor Barra new(int xBarra, int yBarra, int compBarra) { //Parâmetros;
 
         let x = xBarra; //Posição da barra no eixo x;
         let y = yBarra; //Posição da barra no eixo y;
@@ -18,12 +18,6 @@ class Barra{
         do mostrar(); //Mostrar a barra x;
 
         return this;
-    }
-
-    //Método - Encapsula a desalocação de um objeto da memória;
-    method void dispose() {
-        do Memory.deAlloc(this); 
-        return;
     }
 
     //Acessor - Permite que o acesso, fora da classe, ao "x" (lado esquerdo da barra) seja possível; 
@@ -57,13 +51,13 @@ class Barra{
     }
 
     //Método - Define a direção do movimento da barra (baseado no que foi pressionado no teclado)
-    method void definirDirecao(int tecladoInfo) {
+    method void setDirecao(int tecladoInfo) {
         let direcao = tecladoInfo;
         return;
     }
 
     //Método - Define o tamanho da barra;
-    method void definirTamanho(int compBarra) {
+    method void setTamanho(int compBarra) {
         do esconder(); //Esconde a barra;
         let comprimento = compBarra; //Atualiza o comprimento da barra;
         do mostrar(); //Mostra a barra;
@@ -108,4 +102,11 @@ class Barra{
         }
         return;
     }
+
+    //Método - Encapsula a desalocação de um objeto da memória;
+    method void dispose() {
+        do Memory.deAlloc(this); 
+        return;
+    }
+
 }

@@ -10,9 +10,10 @@ class Main{
         var Jogo jogo; //Declara a variável "jogo";
 
         do Jogo.novoJogo(); //"Gera" um novo jogo -> Seta os elementos que fazem parte do jogo (barra, bola, paredes..);
-        let jogo = Jogo.getJogo(); //Atribui o novo jogo a variável "jogo";
+        let jogo = Jogo.retornarJogo(); //Atribui o novo jogo a variável "jogo";
         do jogo.start(); //Inicia o jogo;
         do jogo.dispose(); //Descarta o jogo quando não for mais necessário (fim do jogo);
+        
         return;
 
     }
